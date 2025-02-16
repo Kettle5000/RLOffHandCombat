@@ -1,0 +1,31 @@
+modLoader = "javafml"
+loaderVersion = "[38,)"
+#issueTrackerURL = ""
+license = "MIT"
+
+[[mods]]
+modId = "offhandcombat"
+version = "${version}"
+displayName = "Off Hand Combat"
+authors = "Me!"
+description = '''
+AAAAAAAAAAAAAAA
+'''
+mixins=[
+    "offhandcombat-common-mixins.json",
+    "offhandcombat-mixins.json"
+]
+
+[[dependencies.offhandcombat]]
+modId = "forge"
+mandatory = true
+versionRange = "[38,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.offhandcombat]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.18,)"
+ordering = "NONE"
+side = "BOTH"
