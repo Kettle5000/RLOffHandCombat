@@ -26,7 +26,7 @@ base {
 }
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(17)
+    toolchain.languageVersion = JavaLanguageVersion.of(18)
     withSourcesJar()
 }
 
@@ -73,7 +73,14 @@ minecraft {
 
 // Sponge Mixin configuration
 mixin {
-    add sourceSets.main, 'offhandcombat.refmap.json'
+    add sourceSets.main, "${mod_id}.refmap.json"
+    add sourceSets.main, "${mod_id}.refmap.json"
+    config "${mod_id}.mixins.json"
+    config "${mod_id}-common.mixins.json"
+
+    debug.verbose = true
+    debug.export = true
+    dumpTargetOnFailure = true
 }
 
 // Dependencies and repositories
