@@ -144,7 +144,6 @@ public abstract class ClickMixin {
                 // Send attack packet to server for the swept entity
                 Minecraft.getInstance().getConnection().send(ServerboundInteractPacket.createAttackPacket(livingEntity, this.player.isShiftKeyDown()));
 
-                // Apply knockback locally for immediate visual feedback
                 double dx = livingEntity.getX() - this.player.getX();
                 double dz = livingEntity.getZ() - this.player.getZ();
                 livingEntity.knockback(0.4F, dx, dz);
