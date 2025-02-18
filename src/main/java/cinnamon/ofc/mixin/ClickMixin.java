@@ -98,9 +98,6 @@ public abstract class ClickMixin {
         }
     }
 
-    /**
-     * Checks if the off-hand attack should be a critical hit.
-     */
     private boolean isCriticalHit() {
         return !this.player.onGround() // Player must not be on the ground
                 && !this.player.isInWater() // Player must not be in water
@@ -109,9 +106,6 @@ public abstract class ClickMixin {
                 && this.player.getAttackStrengthScale(0.5F) >= 1.0F; // Attack strength must be charged
     }
 
-    /**
-     * Checks if the off-hand attack should trigger a sweeping attack.
-     */
     private boolean isSweepingAttack() {
         ItemStack offHandStack = this.player.getOffhandItem();
         if (!(offHandStack.getItem() instanceof SwordItem)) {
@@ -120,12 +114,6 @@ public abstract class ClickMixin {
         return this.player.getAttackStrengthScale(0.5F) >= 1.0F && this.player.onGround();
     }
 
-    /**
-     * Performs a sweeping attack around the player, closely following vanilla behavior.
-     */
-    /**
-     * Performs a sweeping attack around the player, closely following vanilla behavior.
-     */
     private void performSweepingAttack(Entity target) {
         float sweepingDamage = 1.0F + EnchantmentHelper.getSweepingDamageRatio(this.player) * this.player.getAttackStrengthScale(0.5F);
 
@@ -158,9 +146,6 @@ public abstract class ClickMixin {
         this.sweepAttackParticles();
     }
 
-    /**
-     * Spawns sweeping attack particles in front of the player.
-     */
     private void sweepAttackParticles() {
         double particleX = this.player.getX() + -Math.sin(Math.toRadians(this.player.getYRot())) * 1.0D;
         double particleZ = this.player.getZ() + Math.cos(Math.toRadians(this.player.getYRot())) * 1.0D;
@@ -169,9 +154,6 @@ public abstract class ClickMixin {
         this.player.level().addParticle(ParticleTypes.SWEEP_ATTACK, particleX, particleY, particleZ, 0.0, 0.0, 0.0);
     }
 
-    /**
-     * Applies critical hit particles and effects with velocity in random directions.
-     */
     private void applyCriticalHitParticles(Entity target) {
         double centerX = target.getX();
         double centerY = target.getY() + target.getBbHeight() / 2.0;
