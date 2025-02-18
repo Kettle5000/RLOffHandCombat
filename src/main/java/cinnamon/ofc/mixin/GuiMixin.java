@@ -72,7 +72,7 @@ public class GuiMixin {
             int j = this.screenHeight / 2 - 7 + 22;
             int k = this.screenWidth / 2 - 8;
             if (flag) {
-                guiGraphics.blit(Gui.GUI_ICONS_LOCATION, k, j, 68, 94, 16, 16);
+                guiGraphics.blit(Gui.GUI_ICONS_LOCATION, k, j + 1, 68, 94, 16, 16);
             } else if (g < 1.0F) {
                 int l = (int) (g * 17.0F);
                 guiGraphics.blit(Gui.GUI_ICONS_LOCATION, k, j, 36, 94, 16, 4);
