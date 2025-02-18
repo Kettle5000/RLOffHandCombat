@@ -17,7 +17,7 @@ public class GameModeAttackMixin {
     @Inject(method = "attack", at = @At(target = "Lnet/minecraft/world/entity/player/Player;attack(Lnet/minecraft/world/entity/Entity;)V", value = "INVOKE"), cancellable = true)
     public void attack(Player player, Entity entity, CallbackInfo ci) {
         RLOffHandCombatMod.Data data = RLOffHandCombatMod.get(player);
-        if(data.attackStrengthTicker <= 5 || player.attackStrengthTicker <= 5) { //todo check ListenerImplMixin class for same issue
+        if(data.attackStrengthTicker <= 5 || player.attackStrengthTicker <= 5) {
             entity.invulnerableTime = 0;
             if(entity instanceof LivingEntity) {
                 ((LivingEntity) entity).lastHurt = 0;

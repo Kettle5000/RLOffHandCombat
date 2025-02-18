@@ -25,7 +25,6 @@ public abstract class SwingMixin extends Entity {
     public int swingTime;
     @Shadow
     public InteractionHand swingingArm;
-    //
     @Unique
     public boolean swinging_temp;
     @Unique

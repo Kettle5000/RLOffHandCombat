@@ -27,12 +27,12 @@ public class ListenerImplMixin implements Listener {
     public void onAttack(CallbackInfo ci) {
         if (((Packet) this.serverboundInteractPacket).get()) {
             RLOffHandCombatMod.Data data = RLOffHandCombatMod.get(this.player);
-            if(data.attackStrengthTicker <= 5 || player.attackStrengthTicker <= 5) { //todo methods from merged loom mappings. should find alternative.
+            if(data.attackStrengthTicker <= 5 || player.attackStrengthTicker <= 5) {
                 Entity target = this.serverboundInteractPacket.getTarget(this.player.serverLevel().getLevel());
                 if (target != null) {
                     target.invulnerableTime = 0;
                     if(target instanceof LivingEntity) {
-                        ((LivingEntity) target).lastHurt = 0; //todo same here. find alternative method from official forge mappings.
+                        ((LivingEntity) target).lastHurt = 0;
                     }
                 }
             }
