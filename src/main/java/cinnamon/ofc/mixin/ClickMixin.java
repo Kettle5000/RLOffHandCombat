@@ -52,22 +52,6 @@ public abstract class ClickMixin {
                         RLOffHandCombatMod.LOGGER.debug("ATTEMPTING OFFHAND SWING?");
                         Entity target = ((EntityHitResult) this.hitResult).getEntity();
 
-                        // Perform off-hand attack
-                        boolean isCritical = isCriticalHit();
-                        boolean isSweeping = isSweepingAttack();
-
-                        // Apply critical damage and particles
-                        if (isCritical) {
-                            DamageSources damageSources = this.player.level().damageSources(); // Get DamageSources instance
-                            target.hurt(damageSources.playerAttack(this.player), 1.5F); // Apply critical hit damage
-                            applyCriticalHitParticles(target);
-                        }
-
-                        // Apply sweeping attack
-                        if (isSweeping) {
-                            performSweepingAttack(target);
-                        }
-
                         // Regular attack
                         this.gameMode.attack(this.player, target);
                         this.player.swing(InteractionHand.OFF_HAND);
