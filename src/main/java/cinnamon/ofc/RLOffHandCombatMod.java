@@ -105,14 +105,4 @@ public class RLOffHandCombatMod {   // changed name since it conflicted with net
         public InteractionHand handOfLastActiveStack;
     }
 
-    //we can subscribe events easily in this class instead of doing it on the init method
-    @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) { 
-    	if (event.phase == TickEvent.Phase.END && event.player instanceof ServerPlayer serverPlayer) {
-    		Data data = get(serverPlayer);
-            data.missTime--;
-            data.attackStrengthTicker++;
-            data.ticksSinceLastActiveStack++;
-    	}
-    }
 }
