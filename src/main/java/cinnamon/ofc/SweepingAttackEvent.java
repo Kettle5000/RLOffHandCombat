@@ -8,8 +8,7 @@ import net.minecraftforge.eventbus.api.Cancelable;
 
 /**
  * Fired when a player performs a sweeping attack.
- * This event is {@link Cancelable}.  
- * If canceled, the sweeping attack will not apply damage or knockback to surrounding entities.
+ * This event is NOT cancelable  
  */
 public class SweepingAttackEvent extends PlayerEvent {
     private final LivingEntity target;
