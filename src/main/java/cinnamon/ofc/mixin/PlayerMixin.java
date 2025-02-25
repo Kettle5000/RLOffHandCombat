@@ -38,6 +38,30 @@ public abstract class PlayerMixin extends Entity {
         }
     }
 
+    @ModifyVariable(method = "attack", at = @At(value = "STORE", ordinal = 0), ordinal = 5)
+    private float injectSweepEvent(float f3, Entity target, @Share("arg") LocalRef<SweepingAttackEvent> argRef) {
+		Player player = (Player) (Object) this;
+		AABB originalbox = player.getItemInHand(InteractionHand.MAIN_HAND).getSweepHitBox(player, target);
+		SweepingAttackEvent event = new SweepingAttackEvent((Player) (Object) this, (LivingEntity)target, f3, originalbox);
+		argRef.set(event);
+        //This fires the sweeping event, however we nee to add MixinExtras in the build gradle dependency to make the Share work
+        MinecraftForge.EVENT_BUS.post(event);
+        f3 = event.getSweepingDamage();
+        return f3;
+    }
+	
+	
+	@ModifyArg(method = "attack", 
+            at = @At(value = "INVOKE", 
+                     target = "Lnet/minecraft/world/level/Level;getEntitiesOfClass(Ljava/lang/Class;Lnet/minecraft/world/phys/AABB;)Ljava/util/List;", 
+                     ordinal = 0), 
+            index = 1) // The AABB is the second argument (index 1)
+	private AABB modifySweepHitbox(AABB originalHitbox, @Share("arg") LocalRef<SweepingAttackEvent> argRef) {
+		// Get the original hitbox
+		originalHitbox = argRef.get().getSweepingBox();
+		return originalHitbox;
+	}
+
     private Player getThis() {
         return (Player) (Object) this;
     }
