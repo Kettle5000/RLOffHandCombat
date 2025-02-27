@@ -6,15 +6,10 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.loading.FMLPaths;
-
-import java.nio.file.Path;
+import net.minecraft.world.item.enchantment.Enchantment;
+import java.util.Map;
 
 public class HandPlatform {
-
-    public static Path getConfigDirectory() {
-        return FMLPaths.CONFIGDIR.get();
-    }
 
     public static boolean canUseOffhand(Entity entity) {
         return entity instanceof Player;
@@ -42,7 +37,7 @@ public class HandPlatform {
         //Reset Swing to half on main hand and full on off hand
         data.attackStrengthTicker = 0;
         if (canSwingHand(player, InteractionHand.MAIN_HAND)) {
-            int halfTick = (int) (Config.Runtime.attackTimeoutAfterSwing * player.getCurrentItemAttackStrengthDelay());
+            int halfTick = (int) (Config.cooldown * player.getCurrentItemAttackStrengthDelay());
             if (ticksSinceLastSwingMain > halfTick) {
                 player.attackStrengthTicker = halfTick;
             }
@@ -61,7 +56,7 @@ public class HandPlatform {
             ItemStack mainHand = player.getMainHandItem();
 
             HandPlatform.makeActive(player, offhand, mainHand);
-            int halfTick = (int) (Config.Runtime.attackTimeoutAfterSwing * player.getCurrentItemAttackStrengthDelay());
+            int halfTick = (int) (Config.cooldown * player.getCurrentItemAttackStrengthDelay());
             HandPlatform.makeInactive(player, offhand, mainHand);
 
             if (ticksSinceLastSwingOff > halfTick) {
@@ -74,7 +69,7 @@ public class HandPlatform {
         RLOffHandCombatMod.Data data = RLOffHandCombatMod.get(player);
         data.attackStrengthTicker = 0;
         if (canSwingHand(player, InteractionHand.MAIN_HAND)) {
-            int halfTick = (int) (Config.Runtime.attackTimeoutAfterSwing * player.getCurrentItemAttackStrengthDelay());
+            int halfTick = (int) (Config.cooldown * player.getCurrentItemAttackStrengthDelay());
             if (player.attackStrengthTicker > halfTick) {
                 player.attackStrengthTicker = halfTick;
             }
@@ -83,11 +78,21 @@ public class HandPlatform {
 
     public static boolean canSwingHand(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        return stack.getAttributeModifiers(
+        boolean flag1 = !Config.items_blacklist.contains(stack.getItem());
+        Map<Enchantment, Integer> enchList = stack.getAllEnchantments();
+        boolean flag2 = true;
+        for (Enchantment ench: Config.enchantments_blacklist) {
+        	if (enchList.containsKey(ench)) {
+        		flag2= false;
+        		break;
+        	}
+        }
+        boolean flag3 = stack.getAttributeModifiers(
                 hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND
         ).containsKey(Attributes.ATTACK_DAMAGE) || stack.getAttributeModifiers(
                 EquipmentSlot.MAINHAND
         ).containsKey(Attributes.ATTACK_DAMAGE);
+        return flag1 && flag2 && flag3;
     }
 
     public static void makeActive(Player playerIn, ItemStack offhand, ItemStack mainHand) {
