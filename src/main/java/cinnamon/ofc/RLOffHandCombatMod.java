@@ -34,46 +34,10 @@ public class RLOffHandCombatMod {   // changed name since it conflicted with net
 
     public RLOffHandCombatMod() {
     	MinecraftForge.EVENT_BUS.register(this);
-		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        String directory = HandPlatform.getConfigDirectory().toAbsolutePath().normalize().toString();
-        RLOffHandCombatMod.makeConfig(directory);
-        RLOffHandCombatMod.readConfig(directory);
+	IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+	ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC, "RLOffHandCombat.toml");
     }
-
-    public static void makeConfig(String location) {
-        File file = new File(location + "/ofc.json");
-        if (!file.exists()) {
-            try {
-                boolean newFile = file.createNewFile();
-                if (newFile) {
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.add("attackTimeoutAfterSwing", new JsonPrimitive(Config.Runtime.attackTimeoutAfterSwing));
-
-                    ObjectMapper objectMapper = ObjectMapper.create();
-                    FileWriter fileWriter = new FileWriter(file);
-                    fileWriter.write(objectMapper.writeValueAsString(jsonObject));
-                    fileWriter.flush();
-                    fileWriter.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static void readConfig(String location) {
-        File file = new File(location + "/ofc.json");
-        if (file.exists()) {
-            try {
-                JsonObject jsonObject = (JsonObject) JsonParser.parseReader(new FileReader(file));
-                JsonElement attackTimeoutAfterSwing = jsonObject.get("attackTimeoutAfterSwing");
-                Config.Runtime.attackTimeoutAfterSwing = attackTimeoutAfterSwing.getAsDouble();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
+	
     public static Data get(Player entity) {
         if (entity.isLocalPlayer()) {
             if (!swingLocal.containsKey(entity.getUUID())) {
