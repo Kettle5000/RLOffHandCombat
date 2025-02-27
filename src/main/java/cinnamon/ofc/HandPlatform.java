@@ -9,11 +9,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.nio.file.Path;
-import java.util.WeakHashMap;
 
 public class HandPlatform {
-
-    private static WeakHashMap<Player, InteractionHand> AttackMap = new WeakHashMap<>();
 
     public static Path getConfigDirectory() {
         return FMLPaths.CONFIGDIR.get();
@@ -39,10 +36,6 @@ public class HandPlatform {
 
         //Swing 
         player.attackStrengthTicker = ticksSinceLastSwingOff;
-        //here is the issue, the method attack uses the native AttackStrength instead of a custom one, this can be fixed by using a mixin to pass the hand used here.
-        //Since this line is called here and you should not be able to attack twice in the same instant, hence causing instantiation loss, you can add this to a weakhashmap
-        //taking the player and the hand used, that way other mods can retrieve the hand used in the attack method and do whatever they want.
-        AttackMap.put(player, InteractionHand.OFF_HAND);
         player.attack(targetEntity);
         player.attackStrengthTicker = ticksSinceLastSwingMain;
 
@@ -55,8 +48,6 @@ public class HandPlatform {
             }
         }
 
-        //Switch back items, and we reset the hand used in the map
-        AttackMap.put(player, InteractionHand.MAIN_HAND);
         setItemStackToSlot(player, EquipmentSlot.OFFHAND, offhand);
         setItemStackToSlot(player, EquipmentSlot.MAINHAND, mainHand);
         makeInactive(player, offhand, mainHand);
@@ -119,14 +110,5 @@ public class HandPlatform {
         } else if (slotIn == EquipmentSlot.OFFHAND) {
             playerIn.getInventory().offhand.set(0, stack);
         }
-    }
-
-    public static InteractionHand getAttackHand(Player player) {
-        InteractionHand hand = AttackMap.get(player);
-        if (hand != null) {
-            return hand;
-        }
-        //Assuming kind of to avoid null checks but logically if it is not set to the offhand then it must be the mainhand
-        return InteractionHand.MAIN_HAND;
     }
 }
